@@ -1,22 +1,16 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title></title>
-</head>
-<body>
-  {{ Form::open(['route'=>'sessions.store']) }}
+
+@extends('layouts.bootstrap')
+
+@section('content')
+  {{ Form::open(['route'=>'sessions.store','class'=>'form-signin']) }}
     <div>
-        {{ Form::label('email', 'Email:') }}
-        {{ Form::email('email') }}
+        {{ Form::email('email', null, ['class'=>'form-control', 'placeholder'=>'Email Address','required'=>'required']) }}
     </div>
     <div>
-    {{ Form::label('password', 'Password:') }}
-    {{ Form::password('password') }}
+    {{ Form::password('password', ['class'=>'form-control', 'placeholder'=>'Password','required'=>'required']) }}
     </div>
     <div>
-    {{ Form::submit('Login') }}
+    {{ Form::submit('Login', ['class'=>'btn btn-lg btn-primary btn-block']) }}
     </div>
   {{ Form::close() }}
-</body>
-</html>
+@endsection
