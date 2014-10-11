@@ -79,7 +79,15 @@ class ArticlesController extends BaseController {
 
     public function show($id){
         $article = Article::find($id);
-        return View::make('basic',['content'=>'<h1>'.$article->title.'</h1><p>Author: '.$article->user->name.'</p>'.$article->content]);
+        if(is_null($article)){
+            return Redirect::route('articles.index')->with('error', 'Article not found');
+        }
+        if(!$article->published){
+            if(!Auth::check() || !($article->user->id == Auth::user()->id)){
+                return Redirect::route('articles.index')->with('warning', 'Article not published');
+            }
+        }
+        return View::make('articles.show',['content'=>'<h1>'.$article->title.'</h1><p>Author: '.$article->user->name.'</p>'.$article->content]);
     }
 
     public function edit($id){
@@ -89,7 +97,11 @@ class ArticlesController extends BaseController {
     }
 
     public function author($id){
-        $articles = Article::where('author_id', '=', $id)->get();
+        if(Auth::check() && (Auth::user()->id == $id || Auth::user()->is_super)){
+            $articles = Article::where('author_id', '=', $id)->get();
+        } else {
+            $articles = Article::where('author_id', '=', $id)->where('published', '=', true)->get();
+        }
         $user = User::find($id);
         return View::make('articles.index', ['articles'=>$articles, 'heading'=>'Articles by '.$user->name]);
     }

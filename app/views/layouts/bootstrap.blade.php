@@ -35,7 +35,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">News Example</a>
+            <a class="navbar-brand" href="/">Laravel Test</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -66,7 +66,7 @@
 <div class="container">
 
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron @yield('class','')">
         @foreach($errors as $error)
             <div class="alert alert-danger"><p>{{ $error['message'] }}</p></div>
         @endforeach

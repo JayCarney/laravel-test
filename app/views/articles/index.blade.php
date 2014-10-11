@@ -18,7 +18,7 @@
         @foreach($articles as $article)
             <tr>
             <td>{{ HTML::linkAction('ArticlesController@show', $article->title,array($article->id)) }}</td>
-            <td>{{{ $article->user->name }}}</td>
+            <td>{{ HTML::linkRoute('articles.author', $article->user->name, array($article->user->id)) }}</td>
             @if(Auth::check() && Auth::user()->is_super)
             <td>
                 @if($article->published)
