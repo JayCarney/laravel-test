@@ -5,9 +5,17 @@
         <div class="panel panel-default">
           <!-- Default panel contents -->
           <div class="panel-heading">{{ isset($heading)? $heading : 'All articles' }}</div>
+            <div class="panel-body">
+            {{ Form::open(['route'=>'articles.search', 'class'=>'navbar-form navbar-left', 'role'=>'search']) }}
+                  <div class="form-group">
+                  {{ Form::text('q', isset($q)?$q:null, ['class'=>'form-control', 'placeholder'=>'Search all articles']) }}
+                  </div>
+                  {{ Form::submit('Search', ['class'=>'btn btn-default']) }}
+            {{ Form::close() }}
+            </div>
           <!-- Table -->
           <table class="table">
-          <tr><th>Title</th><th>Author</th>
+          <tr><th>Title</th><th>Tags</th></th><th>Author</th>
           @if(Auth::check() && Auth::user()->is_super)
           <th>Published</th>
           @endif
@@ -18,6 +26,15 @@
         @foreach($articles as $article)
             <tr>
             <td>{{ HTML::linkAction('ArticlesController@show', $article->title,array($article->id)) }}</td>
+            <td>
+            @foreach($article->tags as $index => $tag)
+                @if($index == count($article->tags) - 1)
+                {{ HTML::linkAction('ArticlesController@tag', $tag->tag ,array($tag->id)) }}
+                @else
+                {{ HTML::linkAction('ArticlesController@tag', $tag->tag,array($tag->id)) }},
+                @endif
+            @endforeach
+            </td>
             <td>{{ HTML::linkRoute('articles.author', $article->user->name, array($article->user->id)) }}</td>
             @if(Auth::check() && Auth::user()->is_super)
             <td>

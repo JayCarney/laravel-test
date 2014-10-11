@@ -12,7 +12,7 @@ class SessionsController extends BaseController {
 
     public function store(){
         if(Auth::attempt(Input::only('email', 'password'))){
-            return Redirect::to('admin');
+            return Redirect::route('articles.author',array(Auth::user()->id));
         } else {
             return Redirect::to('login');
         }

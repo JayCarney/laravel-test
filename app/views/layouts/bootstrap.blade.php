@@ -41,6 +41,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
                 <li>{{ HTML::linkAction('ArticlesController@index', 'Articles') }}</li>
+                <li>{{ HTML::linkAction('UsersController@index', 'Authors') }}</li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

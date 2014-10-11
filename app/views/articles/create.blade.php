@@ -6,6 +6,9 @@
            {{ Form::text('title',isset($title)?$title:null, ['placeholder'=>'Article Title','class'=>'form-control']) }}
         </div>
         <div>
+           {{ Form::text('tags',isset($tags)?$tags:null, ['placeholder'=>'Tags (separated by ",")','class'=>'form-control']) }}
+        </div>
+        <div>
             {{ Form::textarea('content',isset($content)?$content:null,['class'=>'summernote']) }}
 
         </div>

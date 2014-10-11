@@ -8,10 +8,16 @@ class Article extends Eloquent {
      * @var string
      */
     protected $table = 'articles';
+    protected $fillable = array('title', 'content', 'tag', 'tags');
 
     public function user()
     {
         return $this->belongsTo('User', 'author_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('Tag','article_tag');
     }
 
 }

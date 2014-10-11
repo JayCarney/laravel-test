@@ -26,3 +26,7 @@ Route::get('articles/{article}/publish', array('as'=>'articles.publish', 'uses'=
 Route::get('articles/{article}/unpublish', array('as'=>'articles.unpublish', 'uses'=>'ArticlesController@unpublish'));
 Route::get('articles/{article}/delete', array('as'=>'articles.delete', 'uses'=>'ArticlesController@destroy'));
 Route::get('articles/author/{author_id}', array('as'=>'articles.author', 'uses'=>'ArticlesController@author'));
+Route::get('articles/tag/{tag_id}', array('as'=>'articles.tag', 'uses'=>'ArticlesController@tag'));
+Route::post('articles/search', array('as'=>'articles.search', 'uses'=>'ArticlesController@search'));
+Route::get('users/{user_id}/grant', array('as'=>'users.grant_super', 'uses'=>'UsersController@grant_super'));
+Route::get('users/{user_id}/revoke', array('as'=>'users.revoke_super', 'uses'=>'UsersController@revoke_super'));

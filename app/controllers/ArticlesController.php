@@ -46,6 +46,18 @@ class ArticlesController extends BaseController {
             $article->title = Input::get('title');
             $article->content = Input::get('content');
             $article->save();
+            $tagIds = array();
+            if(Input::get('tags')){
+                $tags = Input::get('tags');
+                $tags = explode(',', $tags);
+                foreach($tags as $tag){
+                    $tagObj = Tag::firstOrCreate(['tag'=>$tag]);
+                    $tagIds[] = $tagObj->id;
+                }
+            }
+            //update stored tags for article
+            $article->tags()->sync($tagIds);
+
             return Redirect::route('articles.author', array(Auth::user()->id))->with('info',$message);
         }
     }
@@ -87,13 +99,17 @@ class ArticlesController extends BaseController {
                 return Redirect::route('articles.index')->with('warning', 'Article not published');
             }
         }
-        return View::make('articles.show',['content'=>'<h1>'.$article->title.'</h1><p>Author: '.$article->user->name.'</p>'.$article->content]);
+        return View::make('articles.show',compact('article'));
     }
 
     public function edit($id){
         $article = Article::find($id);
+        $tags = array();
+        foreach($article->tags as $tag){
+            $tags[] = $tag->tag;
+        }
 
-        return View::make('articles.create',['title'=>$article->title, 'content'=>$article->content, 'id'=>$article->id]);
+        return View::make('articles.create',['title'=>$article->title, 'tags' => implode(', ',$tags), 'content'=>$article->content, 'id'=>$article->id]);
     }
 
     public function author($id){
@@ -104,5 +120,27 @@ class ArticlesController extends BaseController {
         }
         $user = User::find($id);
         return View::make('articles.index', ['articles'=>$articles, 'heading'=>'Articles by '.$user->name]);
+    }
+
+    public function tag($id){
+        $tag = Tag::find($id);
+        $articles = $tag->articles;
+        return View::make('articles.index', ['articles'=>$articles, 'heading'=>'Articles tagged as "'.$tag->tag.'"']);
+    }
+
+    public function search(){
+        $term = Input::get('q');
+        $keywords = explode(' ',$term);
+        $query = Article::query();
+        if(!(Auth::check() && Auth::user()->is_super)) {
+            //not a super user
+            $query->where('published', '=', true);
+        }
+        foreach($keywords as $keyword){
+            $query->where('title','like','%'.$keyword.'%');
+        }
+        $articles = $query->get();
+
+        return View::make('articles.index', ['heading'=>'Search results for "'.$term.'"','q'=>$term,'articles' => $articles]);
     }
 }

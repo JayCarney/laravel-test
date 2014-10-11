@@ -35,7 +35,33 @@ class UsersController extends BaseController {
 
     }
 
+    public function index(){
+        $users = User::all();
+        return View::make('users.index',compact('users'));
+    }
+
     public function destroy(){
 
+    }
+    public function grant_super($id){
+        if(Auth::check() && Auth::user()->is_super){
+            $user = User::find($id);
+            $user->is_super = true;
+            $user->save();
+            return Redirect::route('users.index')->with('info', 'Escalated user privileges granted');
+        }
+        return Redirect::route('users.index')->with('error', 'You must me a publisher to modify user privileges');
+    }
+    public function revoke_super($id){
+        if(Auth::check() && Auth::user()->id == $id){
+            return Redirect::route('users.index')->with('error', 'You can not modify your own privileges');
+        }
+        if(Auth::check() && Auth::user()->is_super){
+            $user = User::find($id);
+            $user->is_super = false;
+            $user->save();
+            return Redirect::route('users.index')->with('info', 'Escalated user privileges revoked');
+        }
+        return Redirect::route('users.index')->with('error', 'You must me a publisher to modify user privileges');
     }
 }
