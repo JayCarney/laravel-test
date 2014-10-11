@@ -1,7 +1,10 @@
 <?php
 
 class ArticlesController extends BaseController {
-
+    public function index(){
+        $articles = Article::all();
+        return View::make('articles.index', ['articles'=>$articles]);
+    }
     public function create(){
 
         if(Auth::check()){
@@ -25,16 +28,43 @@ class ArticlesController extends BaseController {
         if($validator->fails()){
             return Redirect::route('articles.create',['errors'=>$validator]);
         } else {
-            $article = new Article();
+            if(Input::get('id')){
+                //existing article
+                $article = Article::find(Input::get('id'));
+                $message = 'Article updated successfully';
+            } else {
+                //new article
+                $article = new Article();
+                $article->author_id = Auth::id();
+                $message = 'Article added successfully';
+
+            }
             $article->title = Input::get('title');
             $article->content = Input::get('content');
-            $article->author_id = Auth::id();
             $article->save();
-            return Redirect::route('articles.create')->with('info','Article added successfully');
+            return Redirect::route('articles.index')->with('info',$message);
         }
     }
 
-    public function destroy(){
+    public function destroy($id){
+        $article = Article::find($id);
+        $article->delete();
 
+        return Redirect::route('articles.index')->with('info','Article removed');
+    }
+
+    public function publish($id){
+
+    }
+
+    public function show($id){
+        $article = Article::find($id);
+        return View::make('basic',['content'=>'<h1>'.$article->title.'</h1><p>Author: '.$article->user->name.'</p>'.$article->content]);
+    }
+
+    public function edit($id){
+        $article = Article::find($id);
+
+        return View::make('articles.create',['title'=>$article->title, 'content'=>$article->content, 'id'=>$article->id]);
     }
 }

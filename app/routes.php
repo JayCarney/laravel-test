@@ -11,15 +11,7 @@
 |
 */
 
-Route::get('/', function()
-{
-//    $user = new User();
-//    $user->email = 'jason@dashmedia.com.au';
-//    $user->name = 'Jason Carney';
-//    $user->password = Hash::make('jason1989');
-//	$user->save();
-});
-
+Route::get('/', 'HomeController@index');
 Route::get('login', 'SessionsController@create');
 Route::get('logout', 'SessionsController@destroy');
 Route::get('signup', 'UsersController@create');
@@ -30,3 +22,5 @@ Route::get('admin', function(){
 Route::resource('sessions', 'SessionsController');
 Route::resource('users', 'UsersController');
 Route::resource('articles', 'ArticlesController');
+Route::get('articles/{article}/publish', array('as'=>'articles.publish', 'uses'=>'ArticlesController@publish'));
+Route::get('articles/{article}/delete', array('as'=>'articles.delete', 'uses'=>'ArticlesController@destroy'));

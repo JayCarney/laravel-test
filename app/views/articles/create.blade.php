@@ -9,6 +9,9 @@
             {{ Form::textarea('content',isset($content)?$content:null,['class'=>'summernote']) }}
 
         </div>
+        @if(isset($id))
+        {{ Form::hidden('id',$id) }}
+        @endif
         {{ Form::submit('Save Article', ['class'=>'btn btn-lg btn-primary btn-block']) }}
   {{ Form::close() }}
 @endsection

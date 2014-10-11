@@ -9,4 +9,9 @@ class Article extends Eloquent {
      */
     protected $table = 'articles';
 
+    public function user()
+    {
+        return $this->belongsTo('User', 'author_id');
+    }
+
 }
