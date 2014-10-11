@@ -2,7 +2,11 @@
 
 class ArticlesController extends BaseController {
     public function index(){
-        $articles = Article::all();
+        if(Auth::check() && Auth::user()->is_super){
+            $articles = Article::all();
+        } else {
+            $articles = Article::where('published', '=', true)->get();
+        }
         return View::make('articles.index', ['articles'=>$articles]);
     }
     public function create(){
@@ -42,7 +46,7 @@ class ArticlesController extends BaseController {
             $article->title = Input::get('title');
             $article->content = Input::get('content');
             $article->save();
-            return Redirect::route('articles.index')->with('info',$message);
+            return Redirect::route('articles.author', array(Auth::user()->id))->with('info',$message);
         }
     }
 
@@ -54,7 +58,23 @@ class ArticlesController extends BaseController {
     }
 
     public function publish($id){
+        if(!Auth::check()){
+            return Redirect::route('articles.index')->with('error','You must be a super-user to publish articles');
+        }
+        $article = Article::find($id);
+        $article->published = true;
+        $article->save();
+        return Redirect::route('articles.index')->with('info','Article published');
+    }
 
+    public function unpublish($id){
+        if(!Auth::check()){
+            return Redirect::route('articles.index')->with('error','You must be a super-user to unpublish articles');
+        }
+        $article = Article::find($id);
+        $article->published = false;
+        $article->save();
+        return Redirect::route('articles.index')->with('info','Article unpublished');
     }
 
     public function show($id){
@@ -66,5 +86,11 @@ class ArticlesController extends BaseController {
         $article = Article::find($id);
 
         return View::make('articles.create',['title'=>$article->title, 'content'=>$article->content, 'id'=>$article->id]);
+    }
+
+    public function author($id){
+        $articles = Article::where('author_id', '=', $id)->get();
+        $user = User::find($id);
+        return View::make('articles.index', ['articles'=>$articles, 'heading'=>'Articles by '.$user->name]);
     }
 }

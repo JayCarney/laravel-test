@@ -17,7 +17,8 @@ class HomeController extends BaseController {
 
 	public function index()
 	{
-		return View::make('basic', ['content'=>'<h1>Homepage</h1>']);
+        $articles = Article::where('published', '=', true)->orderBy('updated_at','desc')->take(3)->get();
+		return View::make('homepage', ['title'=>'Homepage', 'articles'=>$articles]);
 	}
 
 }

@@ -23,4 +23,6 @@ Route::resource('sessions', 'SessionsController');
 Route::resource('users', 'UsersController');
 Route::resource('articles', 'ArticlesController');
 Route::get('articles/{article}/publish', array('as'=>'articles.publish', 'uses'=>'ArticlesController@publish'));
+Route::get('articles/{article}/unpublish', array('as'=>'articles.unpublish', 'uses'=>'ArticlesController@unpublish'));
 Route::get('articles/{article}/delete', array('as'=>'articles.delete', 'uses'=>'ArticlesController@destroy'));
+Route::get('articles/author/{author_id}', array('as'=>'articles.author', 'uses'=>'ArticlesController@author'));
