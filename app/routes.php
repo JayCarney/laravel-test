@@ -15,10 +15,6 @@ Route::get('/', 'HomeController@index');
 Route::get('login', 'SessionsController@create');
 Route::get('logout', 'SessionsController@destroy');
 Route::get('signup', 'UsersController@create');
-Route::get('admin', function(){
-    return "Admin only";
-})->before('auth');
-
 Route::resource('sessions', 'SessionsController');
 Route::resource('users', 'UsersController');
 Route::resource('articles', 'ArticlesController');
