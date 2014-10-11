@@ -25,12 +25,16 @@ class UsersController extends BaseController {
         if($validator->fails()){
             return View::make('users.create',['errors'=>$validator]);
         } else {
+            $total_users = count(User::all());
             $user = new User();
             $user->name = Input::get('name');
             $user->email = Input::get('email');
             $user->password = Hash::make(Input::get('password'));
+            if($total_users == 0){
+                $user->is_super = true;
+            }
             $user->save();
-            return Redirect::to('login')->with('flash','Account created, please sign in');
+            return Redirect::to('login')->with('info','Account created, please sign in');
         }
 
     }
