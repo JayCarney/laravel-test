@@ -19,6 +19,12 @@ class ArticlesController extends BaseController {
     }
 
     public function store(){
+        $imageMimeTypes = ['image/jpg','image/jpeg','image/png','image/gif'];
+        $image = null;
+        if(Input::hasFile('image') && in_array(Input::file('image')->getMimeType(),$imageMimeTypes)) {
+            Input::file('image')->move(public_path() . '/uploads/' . Auth::user()->id, Input::file('image')->getClientOriginalName());
+            $image = '/uploads/' . Auth::user()->id . '/' . Input::file('image')->getClientOriginalName();
+        }
         if(!Auth::check()){
             return Redirect::to('signin')->with('error','You must be signed in the create an article');
         }
@@ -42,6 +48,9 @@ class ArticlesController extends BaseController {
                 $article->author_id = Auth::id();
                 $message = 'Article added successfully';
 
+            }
+            if(!is_null($image)){
+                $article->image = $image;
             }
             $article->title = Input::get('title');
             $article->content = Input::get('content');

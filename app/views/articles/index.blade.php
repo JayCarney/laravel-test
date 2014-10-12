@@ -15,7 +15,7 @@
             </div>
           <!-- Table -->
           <table class="table">
-          <tr><th>Title</th><th>Tags</th></th><th>Author</th>
+          <tr><th>Title</th><th>Tags</th><th>Image</th><th>Author</th>
           @if(Auth::check() && Auth::user()->is_super)
           <th>Published</th>
           @endif
@@ -34,6 +34,9 @@
                 {{ HTML::linkAction('ArticlesController@tag', $tag->tag,array($tag->id)) }},
                 @endif
             @endforeach
+            </td>
+            <td>
+            {{{ $article->image }}}
             </td>
             <td>{{ HTML::linkRoute('articles.author', $article->user->name, array($article->user->id)) }}</td>
             @if(Auth::check() && Auth::user()->is_super)
