@@ -6,6 +6,9 @@
       @foreach($articles as $article)
       <div class="col-sm-6 col-md-4">
         <h2>{{{ $article->title }}}</h2>
+        @if(!empty($article->image))
+        {{ HTML::image($article->image, $article->title, ['class'=>'article_thumbnail']) }}
+        @endif
         <p>{{ substr(preg_replace('#<[^>]+>#', ' ',$article->content),0,50) }}...</p>
         {{ HTML::linkRoute('articles.show', 'Read More', array($article->id), ['class'=>'btn btn-primary', 'role'=>'button']) }}
       </div>

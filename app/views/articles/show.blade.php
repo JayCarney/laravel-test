@@ -14,6 +14,9 @@
     @endforeach
   @endif
   </p>
+  @if(!empty($article->image))
+  {{ HTML::image($article->image, $article->title, ['class'=>'article_image']) }}
+  @endif
   {{ $article->content }}
 @endsection
 

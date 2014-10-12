@@ -60,7 +60,7 @@ class ArticlesController extends BaseController {
                 $tags = Input::get('tags');
                 $tags = explode(',', $tags);
                 foreach($tags as $tag){
-                    $tagObj = Tag::firstOrCreate(['tag'=>$tag]);
+                    $tagObj = Tag::firstOrCreate(['tag'=>trim($tag)]);
                     $tagIds[] = $tagObj->id;
                 }
             }

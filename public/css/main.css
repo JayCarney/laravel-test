@@ -10,3 +10,18 @@
 .file-input{
     margin-top: 18px;
 }
+
+img{
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+}
+
+.article_image{
+    padding-bottom: 20px;
+}
+
+.article_thumbnail{
+    padding-bottom: 15px;
+}
